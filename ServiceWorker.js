@@ -5,29 +5,54 @@ const contentToCache = [
     "Build/build_0.7.data",
     "Build/build_0.7.wasm",
     "TemplateData/style.css"
-
 ];
 
+// Install event: cache app shell
 self.addEventListener('install', function (e) {
     console.log('[Service Worker] Install');
-    
     e.waitUntil((async function () {
-      const cache = await caches.open(cacheName);
-      console.log('[Service Worker] Caching all: app shell and content');
-      await cache.addAll(contentToCache);
+        const cache = await caches.open(cacheName);
+        console.log('[Service Worker] Caching all: app shell and content');
+        await cache.addAll(contentToCache);
     })());
+    self.skipWaiting(); // Activate immediately
 });
 
+// Activate event: clean up old caches
+self.addEventListener('activate', function (e) {
+    console.log('[Service Worker] Activate');
+    e.waitUntil((async function () {
+        const keys = await caches.keys();
+        await Promise.all(
+            keys.map((key) => {
+                if (key !== cacheName) {
+                    console.log('[Service Worker] Deleting old cache:', key);
+                    return caches.delete(key);
+                }
+            })
+        );
+    })());
+    self.clients.claim(); // Take control immediately
+});
+
+// Fetch event: serve from cache, then fetch and cache new
 self.addEventListener('fetch', function (e) {
     e.respondWith((async function () {
-      let response = await caches.match(e.request);
-      console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
-      if (response) { return response; }
+        const cachedResponse = await caches.match(e.request);
+        if (cachedResponse) {
+            console.log(`[Service Worker] Serving from cache: ${e.request.url}`);
+            return cachedResponse;
+        }
 
-      response = await fetch(e.request);
-      const cache = await caches.open(cacheName);
-      console.log(`[Service Worker] Caching new resource: ${e.request.url}`);
-      cache.put(e.request, response.clone());
-      return response;
+        try {
+            const networkResponse = await fetch(e.request);
+            const cache = await caches.open(cacheName);
+            cache.put(e.request, networkResponse.clone());
+            console.log(`[Service Worker] Fetched & cached: ${e.request.url}`);
+            return networkResponse;
+        } catch (err) {
+            console.warn(`[Service Worker] Fetch failed: ${e.request.url}`, err);
+            throw err;
+        }
     })());
 });
