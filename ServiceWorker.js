@@ -1,9 +1,9 @@
-const cacheName = "hexagonplay-لعبة اختبار الذاكرة-0.8";
+const cacheName = "hexagonplay-لعبة اختبار الذاكرة-0.9";
 const contentToCache = [
-    "Build/build_0.8.loader.js",
-    "Build/build_0.8.framework.js",
-    "Build/build_0.8.data",
-    "Build/build_0.8.wasm",
+    "Build/build_0.9.loader.js",
+    "Build/build_0.9.framework.js",
+    "Build/build_0.9.data",
+    "Build/build_0.9.wasm",
     "TemplateData/style.css"
 ];
 
