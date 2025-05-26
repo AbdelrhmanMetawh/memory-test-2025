@@ -1,11 +1,19 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" rel="stylesheet">
   <title>Device Simulator</title>
   <style>
+    *{
+      font-family: cairo;
+    }
     body {
-      background: #fff;
+      background: #ecf0f1;
       color: #fff;
       font-family: sans-serif;
       display: flex;
@@ -13,107 +21,117 @@
       align-items: center;
       padding: 20px;
       margin: 0;
-    }.controls {
-  margin-bottom: 20px;
-  text-align: center;
-}
+    }
 
-.controls select,
-.controls input {
-  padding: 6px 10px;
-  margin: 5px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: none;
-}
+    .controls {
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-.controls button {
-  padding: 6px 14px;
-  font-size: 14px;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  margin: 5px;
-}
+    .controls select,
+    .controls input {
+      padding: 6px 10px;
+      margin: 5px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+    }
 
-.phone-frame {
-  position: relative;
-  border: 16px solid #000;
-  border-radius: 50px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  overflow: hidden;
-  background: #111;
-  transition: all 0.3s ease;
-}
+    .controls button {
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 5px;
+      background-color: #2f3542;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+    }
 
-.notch,
-.cutout,
-.island {
-  position: absolute;
-  background: #000;
-  z-index: 10;
-}
+    .phone-frame {
+      position: relative;
+      border: 16px solid #000;
+      border-radius: 50px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      background: #111;
+      transition: all 0.3s ease;
+    }
 
-.notch {
-  border-radius: 0 0 15px 15px;
-}
+    .notch,
+    .cutout,
+    .island {
+      position: absolute;
+      background: #000;
+      z-index: 10;
+    }
 
-.island {
-  width: 120px;
-  height: 30px;
-  border-radius: 20px;
-}
+    .notch {
+      border-radius: 0 0 15px 15px;
+    }
 
-.cutout {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-}
+    .island {
+      width: 120px;
+      height: 30px;
+      border-radius: 20px;
+    }
 
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
+    .cutout {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
 
-.label {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
-}
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
 
+    .label {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #121212;
+    }
 
-  .zoom-content {
+    /*zoom*/
+    .zoom-content {
     transition: transform 0.2s ease;
-    transform-origin: center center; /* zoom from center */
+    transform-origin: 0 0; /* zoom from center */
     /* To keep content horizontally centered */
+    /*display: flex;
+    justify-content: center;*/
   }
-
   .zoom-controls {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
+    bottom: 27px;
+    right: -5%;
     transform: translateX(-50%);
-    background: #eee;
-    padding: 10px 20px;
+    background: #ffffff;
+    padding: 10px 10px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     z-index: 1000;
   }
   .zoom-controls button {
-    font-size: 24px;
+    font-size: 25px;
     margin: 0 10px;
     cursor: pointer;
+    border-radius: 9px;
+    border: #ffffff;
+    background-color: #fff;
   }
 
   </style>
 </head>
 <body>
-<div class="zoom-content">
   <div class="controls">
+    <div style="margin-bottom: 5px; color: #121212;">رابط اللعبة&nbsp;&nbsp;<i class="fa-solid fa-link"></i></div>
+    <input style="width: 401px;" type="text" id="game-url" placeholder="ادخل رابط اللعبة" size="40"
+           value="https://abdelrhmanmetawh.github.io/memory-test-2025/index.html" />
+    <div style="margin-top: 10px; margin-bottom: 5px; color:#121212;">الجهاز&nbsp;&nbsp;<i class="fa-solid fa-mobile"></i></div>
     <select id="device-select">
       <option value="iphone-x">iPhone X</option>
       <option value="iphone-15">iPhone 15</option>
@@ -128,25 +146,28 @@ iframe {
       <option value="ipad-pro-129">iPad Pro 12.9"</option>
       <option value="samsung-tab-a6">Samsung Tab A6</option>
     </select>
-    <input type="text" id="game-url" placeholder="Enter game URL" size="40"
-           value="https://abdelrhmanmetawh.github.io/memory-test-2025/index.html" />
-    <button onclick="loadGame()">Load Game</button>
-    <button onclick="rotatePhone()">Rotate</button>
-  </div>  <div id="phone-container" class="phone-frame">
+    <button onclick="loadGame()"><i class="fa-solid fa-play"></i>&nbsp;&nbsp;&nbsp;تحميل اللعبة</button>
+    <button onclick="rotatePhone()"><i class="fa-solid fa-rotate"></i>&nbsp;&nbsp;&nbsp;تدوير الشاشة</button>
+  </div>
+
+  <div class="zoom-content">
+  <div id="phone-container" class="phone-frame">
     <div id="notch" class="notch" style="display: none;"></div>
     <div id="island" class="island" style="display: none;"></div>
     <div id="cutout" class="cutout" style="display: none;"></div>
     <iframe id="game-frame"></iframe>
-  </div>  <div id="label" class="label"></div> 
+  </div>
 
-</div>
+  <div id="label" class="label"></div>
+  </div>
 
-<div class="zoom-controls">
-  <button class="zoom-out">-</button>
-  <button class="zoom-in">+</button>
-</div>
+  <div class="zoom-controls">
+  <button class="zoom-out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+  <button class="zoom-in"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+  <button class="reset"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+  </div>
 
- <script>
+  <script>
     let isLandscape = true;
 
     const devices = {
@@ -226,12 +247,12 @@ iframe {
       if (device.type === 'cutout') {
         cutout.style.display = 'block';
         if (isLandscape) {
-          cutout.style.left = '0';
+          cutout.style.left = '15px';
           cutout.style.top = '50%';
           cutout.style.transform = 'translateY(-50%)';
         } else {
           cutout.style.left = '50%';
-          cutout.style.top = '0';
+          cutout.style.top = '15px';
           cutout.style.transform = 'translateX(-50%)';
         }
       }
@@ -256,10 +277,16 @@ iframe {
   const content = document.querySelector('.zoom-content');
   const zoomInBtn = document.querySelector('.zoom-in');
   const zoomOutBtn = document.querySelector('.zoom-out');
+  const resetBtn = document.querySelector('.reset');
 
   function applyScale() {
     content.style.transform = `scale(${scale})`;
   }
+
+  resetBtn.addEventListener('click', () => {
+    scale = 1;
+    applyScale();
+  });
 
   zoomInBtn.addEventListener('click', () => {
     if (scale < maxScale) {
