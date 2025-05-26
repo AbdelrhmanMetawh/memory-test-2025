@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Simulator</title>
+  <style>
+    body {
+      background: #222;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .controls select,
+    .controls input {
+      padding: 6px 10px;
+      margin: 5px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .controls button {
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 5px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .phone-frame {
+      position: relative;
+      border: 16px solid #000;
+      border-radius: 50px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      background: #111;
+      transition: all 0.3s ease;
+    }
+
+    .notch,
+    .cutout,
+    .island {
+      position: absolute;
+      background: #000;
+      z-index: 10;
+    }
+
+    .notch {
+      border-radius: 0 0 15px 15px;
+    }
+
+    .island {
+      width: 120px;
+      height: 30px;
+      border-radius: 20px;
+    }
+
+    .cutout {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .label {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <select id="device-select">
+      <option value="iphone-x">iPhone X</option>
+      <option value="iphone-15">iPhone 15</option>
+      <option value="iphone-15-pro">iPhone 15 Pro</option>
+      <option value="iphone-15-pro-max">iPhone 15 Pro Max</option>
+      <option value="samsung">Samsung A52</option>
+      <option value="samsung-s24">Samsung S24</option>
+      <option value="samsung-s24-ultra">Samsung S24 Ultra</option>
+      <option value="ipad-mini">iPad Mini</option>
+      <option value="ipad-air">iPad Air</option>
+      <option value="ipad-pro-11">iPad Pro 11"</option>
+      <option value="ipad-pro-129">iPad Pro 12.9"</option>
+    </select>
+    <input type="text" id="game-url" placeholder="Enter game URL" size="40"
+           value="https://abdelrhmanmetawh.github.io/memory-test-2025/index.html" />
+    <button onclick="loadGame()">Load Game</button>
+    <button onclick="rotatePhone()">Rotate</button>
+  </div>
+
+  <div id="phone-container" class="phone-frame">
+    <div id="notch" class="notch" style="display: none;"></div>
+    <div id="island" class="island" style="display: none;"></div>
+    <div id="cutout" class="cutout" style="display: none;"></div>
+    <iframe id="game-frame"></iframe>
+  </div>
+
+  <div id="label" class="label"></div>
+
+  <script>
+    let isLandscape = true;
+
+    const devices = {
+      'iphone-x': { w: 375, h: 812, name: 'iPhone X', type: 'notch' },
+      'iphone-15': { w: 393, h: 852, name: 'iPhone 15', type: 'island' },
+      'iphone-15-pro': { w: 393, h: 852, name: 'iPhone 15 Pro', type: 'island' },
+      'iphone-15-pro-max': { w: 430, h: 932, name: 'iPhone 15 Pro Max', type: 'island' },
+      'samsung': { w: 412, h: 915, name: 'Samsung A52', type: 'cutout' },
+      'samsung-s24': { w: 396, h: 884, name: 'Samsung S24', type: 'cutout' },
+      'samsung-s24-ultra': { w: 480, h: 1040, name: 'Samsung S24 Ultra', type: 'cutout' },
+      'ipad-mini': { w: 744, h: 1133, name: 'iPad Mini', type: 'none' },
+      'ipad-air': { w: 820, h: 1180, name: 'iPad Air', type: 'none' },
+      'ipad-pro-11': { w: 834, h: 1194, name: 'iPad Pro 11"', type: 'none' },
+      'ipad-pro-129': { w: 1024, h: 1366, name: 'iPad Pro 12.9"', type: 'none' }
+    };
+
+    function loadGame() {
+      const url = document.getElementById('game-url').value;
+      const deviceKey = document.getElementById('device-select').value;
+      const device = devices[deviceKey];
+      const phone = document.getElementById('phone-container');
+      const notch = document.getElementById('notch');
+      const island = document.getElementById('island');
+      const cutout = document.getElementById('cutout');
+      const label = document.getElementById('label');
+      const frame = document.getElementById('game-frame');
+
+      frame.src = url;
+      notch.style.display = 'none';
+      island.style.display = 'none';
+      cutout.style.display = 'none';
+
+      const w = isLandscape ? device.h : device.w;
+      const h = isLandscape ? device.w : device.h;
+      phone.style.width = w + 'px';
+      phone.style.height = h + 'px';
+
+      if (device.type === 'notch') {
+        notch.style.display = 'block';
+        if (isLandscape) {
+          notch.style.width = '30px';
+          notch.style.height = '120px';
+          notch.style.left = '0';
+          notch.style.top = '50%';
+          notch.style.transform = 'translateY(-50%)';
+          notch.style.borderRadius = '0 15px 15px 0';
+        } else {
+          notch.style.width = '210px';
+          notch.style.height = '30px';
+          notch.style.left = '50%';
+          notch.style.top = '0';
+          notch.style.transform = 'translateX(-50%)';
+          notch.style.borderRadius = '0 0 15px 15px';
+        }
+      }
+
+      if (device.type === 'island') {
+        island.style.display = 'block';
+        if (isLandscape) {
+          island.style.width = '30px';
+          island.style.height = '120px';
+          island.style.left = '0';
+          island.style.top = '50%';
+          island.style.transform = 'translateY(-50%)';
+          island.style.borderRadius = '0 15px 15px 0';
+        } else {
+          island.style.width = '120px';
+          island.style.height = '30px';
+          island.style.left = '50%';
+          island.style.top = '0';
+          island.style.transform = 'translateX(-50%)';
+          island.style.borderRadius = '20px';
+        }
+      }
+
+      if (device.type === 'cutout') {
+        cutout.style.display = 'block';
+        if (isLandscape) {
+          cutout.style.left = '0';
+          cutout.style.top = '50%';
+          cutout.style.transform = 'translateY(-50%)';
+        } else {
+          cutout.style.left = '50%';
+          cutout.style.top = '0';
+          cutout.style.transform = 'translateX(-50%)';
+        }
+      }
+
+      label.textContent = `${device.name} – ${isLandscape ? 'Landscape' : 'Portrait'}`;
+    }
+
+    function rotatePhone() {
+      isLandscape = !isLandscape;
+      loadGame();
+    }
+
+    window.onload = loadGame;
+  </script>
+</body>
+</html>
