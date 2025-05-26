@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Device Simulator</title>
   <style>
     body {
-      background: #ccc;
+      background: #a5a5a5;
       color: #fff;
       font-family: sans-serif;
       display: flex;
@@ -14,79 +13,78 @@
       align-items: center;
       padding: 20px;
       margin: 0;
-    }
+    }.controls {
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-    .controls {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+.controls select,
+.controls input {
+  padding: 6px 10px;
+  margin: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+}
 
-    .controls select,
-    .controls input {
-      padding: 6px 10px;
-      margin: 5px;
-      font-size: 14px;
-      border-radius: 5px;
-      border: none;
-    }
+.controls button {
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
 
-    .controls button {
-      padding: 6px 14px;
-      font-size: 14px;
-      border-radius: 5px;
-      background-color: #444;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      margin: 5px;
-    }
+.phone-frame {
+  position: relative;
+  border: 16px solid #000;
+  border-radius: 50px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  overflow: hidden;
+  background: #111;
+  transition: all 0.3s ease;
+}
 
-    .phone-frame {
-      position: relative;
-      border: 16px solid #000;
-      border-radius: 50px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      overflow: hidden;
-      background: #111;
-      transition: all 0.3s ease;
-    }
+.notch,
+.cutout,
+.island {
+  position: absolute;
+  background: #000;
+  z-index: 10;
+}
 
-    .notch,
-    .cutout,
-    .island {
-      position: absolute;
-      background: #000;
-      z-index: 10;
-    }
+.notch {
+  border-radius: 0 0 15px 15px;
+}
 
-    .notch {
-      border-radius: 0 0 15px 15px;
-    }
+.island {
+  width: 120px;
+  height: 30px;
+  border-radius: 20px;
+}
 
-    .island {
-      width: 120px;
-      height: 30px;
-      border-radius: 20px;
-    }
+.cutout {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
 
-    .cutout {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-    }
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
 
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
+.label {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
 
-    .label {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-    }
   </style>
 </head>
 <body>
@@ -103,23 +101,18 @@
       <option value="ipad-air">iPad Air</option>
       <option value="ipad-pro-11">iPad Pro 11"</option>
       <option value="ipad-pro-129">iPad Pro 12.9"</option>
+      <option value="samsung-tab-a6">Samsung Tab A6</option>
     </select>
     <input type="text" id="game-url" placeholder="Enter game URL" size="40"
            value="https://abdelrhmanmetawh.github.io/memory-test-2025/index.html" />
     <button onclick="loadGame()">Load Game</button>
     <button onclick="rotatePhone()">Rotate</button>
-  </div>
-
-  <div id="phone-container" class="phone-frame">
+  </div>  <div id="phone-container" class="phone-frame">
     <div id="notch" class="notch" style="display: none;"></div>
     <div id="island" class="island" style="display: none;"></div>
     <div id="cutout" class="cutout" style="display: none;"></div>
     <iframe id="game-frame"></iframe>
-  </div>
-
-  <div id="label" class="label"></div>
-
-  <script>
+  </div>  <div id="label" class="label"></div>  <script>
     let isLandscape = true;
 
     const devices = {
@@ -133,7 +126,8 @@
       'ipad-mini': { w: 744, h: 1133, name: 'iPad Mini', type: 'none' },
       'ipad-air': { w: 820, h: 1180, name: 'iPad Air', type: 'none' },
       'ipad-pro-11': { w: 834, h: 1194, name: 'iPad Pro 11"', type: 'none' },
-      'ipad-pro-129': { w: 1024, h: 1366, name: 'iPad Pro 12.9"', type: 'none' }
+      'ipad-pro-129': { w: 1024, h: 1366, name: 'iPad Pro 12.9"', type: 'none' },
+      'samsung-tab-a6': { w: 800, h: 1280, name: 'Samsung Tab A6', type: 'none' }
     };
 
     function loadGame() {
@@ -217,6 +211,5 @@
     }
 
     window.onload = loadGame;
-  </script>
-</body>
+  </script></body>
 </html>
