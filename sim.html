@@ -88,8 +88,10 @@ iframe {
 
   .zoom-content {
     transition: transform 0.2s ease;
-    transform-origin: 0 0; /* zoom from top-left */
+    transform-origin: center center; /* zoom from center */
+    /* To keep content horizontally centered */
   }
+
   .zoom-controls {
     position: fixed;
     bottom: 20px;
