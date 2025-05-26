@@ -85,6 +85,28 @@ iframe {
   font-size: 14px;
 }
 
+
+  .zoom-content {
+    transition: transform 0.2s ease;
+    transform-origin: 0 0; /* zoom from top-left */
+  }
+  .zoom-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #eee;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  .zoom-controls button {
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
   </style>
 </head>
 <body>
@@ -112,7 +134,14 @@ iframe {
     <div id="island" class="island" style="display: none;"></div>
     <div id="cutout" class="cutout" style="display: none;"></div>
     <iframe id="game-frame"></iframe>
-  </div>  <div id="label" class="label"></div>  <script>
+  </div>  <div id="label" class="label"></div> 
+
+<div class="zoom-controls">
+  <button class="zoom-out">-</button>
+  <button class="zoom-in">+</button>
+</div>
+
+ <script>
     let isLandscape = true;
 
     const devices = {
@@ -211,5 +240,36 @@ iframe {
     }
 
     window.onload = loadGame;
-  </script></body>
+  </script>
+
+<script>
+  let scale = 1;
+  const scaleStep = 0.1;
+  const minScale = 0.5;
+  const maxScale = 3;
+
+  const content = document.querySelector('.zoom-content');
+  const zoomInBtn = document.querySelector('.zoom-in');
+  const zoomOutBtn = document.querySelector('.zoom-out');
+
+  function applyScale() {
+    content.style.transform = `scale(${scale})`;
+  }
+
+  zoomInBtn.addEventListener('click', () => {
+    if (scale < maxScale) {
+      scale += scaleStep;
+      applyScale();
+    }
+  });
+
+  zoomOutBtn.addEventListener('click', () => {
+    if (scale > minScale) {
+      scale -= scaleStep;
+      applyScale();
+    }
+  });
+</script>
+
+</body>
 </html>
